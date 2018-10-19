@@ -1,0 +1,26 @@
+==============================================================================
+GAME INFO:
+------------------------------------------------------------------------------
+Name:              Maniac Mansion
+Published:         1987 Lucasfilm Games [Activision]
+Programmer:        Ron Gilbert, David Fox & Carl Mey
+Musician:          Chris Grigg & David Lawrence
+Language:          German
+Genre:             Adventure - Joystick only
+Players:           1P Only
+Control:           Joystick Port 1
+Comment: 
+Sid:               MUSICIANS\G\Grigg_Chris\Maniac_Mansion.sid          
+==============================================================================
+VERSION INFO:
+------------------------------------------------------------------------------
+Cracked/Crunched:  The Softkiller-Crew (TSK)
+Game Length:       2 Disks
+Trainers:          0
+High Score Saver:  No
+Loading Screen:    No
+Included Docs:     No
+True Drive Emul.:  No
+Pal/NTSC:          PAL(+NTSC?)
+Comment:           
+==============================================================================
