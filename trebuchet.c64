@@ -1,0 +1,109 @@
+1000 REM Trebuchet
+1010 REM KASTIUS BASIC Trebuchet
+1020 REM ----------------------- 
+2000 CLS
+2010 PRINT "A trebuchet is a type of medieval weapon that was used to throw projectiles into an enemy fortification.  In this game your job is to throw a projectile from the green base to hit the red target.  You control the flight by selecting the initial speed and angle.  The speed must be between 1 and 10.  The angle must be between 90 (straight up) and 0 (straight to the right)."
+2020 PRINT
+2020 REM Pick two random elevations for the ground
+2030 LET A = ROUND(RAND(25) + 0.5)
+2040 LET B = ROUND(RAND(25) + 0.5)
+2050 REM Draw the terrain
+2060 FOR I = 0 TO 24 
+2065 FOR J = 0 TO 50
+2070 IF J <= A THEN PLOT I, J, "black" ELSE PLOT I, J, "cyan"
+2075 NEXT J
+2080 NEXT I
+2090 FOR I = 25 TO 49 
+2095 FOR J = 0 TO 50
+2100 IF J <= B THEN PLOT I, J, "black" ELSE PLOT I, J, "cyan"
+2105 NEXT J
+2110 NEXT I
+2120 IF A > B THEN LET S = -1 ELSE LET S = 1
+2130 FOR I = A TO B STEP S
+2140 PLOT 25, I, "black"
+2150 NEXT I
+2160 REM Plot the base
+2170 PLOT 10, A, "green"
+2180 REM Plot the target
+2190 PLOT 39, B, "red"
+2200 PLOT 40, B, "red"
+2210 PLOT 41, B, "red"
+2220 REM Draw the castle
+2230 FOR I = B+1 TO B + 3
+2240 PLOT 39, I, "gray"
+2250 PLOT 40, I, "gray"
+2260 PLOT 41, I, "gray"
+2270 PLOT 38, I+2, "gray"
+2280 PLOT 42, I+1, "gray"
+2290 PLOT 40, I+3, "gray"
+2300 NEXT I
+3000 REM Starting values for the projectile
+3010 LET X = 10
+3020 LET Y = A + 1
+3030 REM Ask the user for the projectile's initial speed and direction
+3040 INPUT "Speed (1-10)?"; P
+3050 IF P >= 1 AND P <=10 THEN GOTO 3080
+3060 PRINT "Speed must be between 1 and 10"
+3070 GOTO 3040
+3080 INPUT "Angle (0 - 90)?"; F
+3090 IF F >= 0 AND F <= 90 THEN GOTO 3130
+3100 PRINT "The angle must be between 0 and 90"
+3120 GOTO 3080
+3130 REM Transform from speed and angle to velocity in the X and Y directions
+3140 REM U is the X velocity
+3150 LET U = P / 5 * COS(F/180 * PI)
+3160 REM V is the Y velocity
+3170 LET V = P / 5 * SIN(F/180 * PI)
+3172 REM Initialize Z -- the background color
+3175 LET Z = "cyan"
+3180 REM Remove the old point by painting it the same color as the background
+3190 PLOT X, Y, Z
+3200 REM Update the projectile's coordinates by adding the velocity 
+3210 LET X = X + U
+3220 LET Y = Y + V
+3230 REM Collision detection
+3240 IF X < 25 AND Y < A THEN GOTO 4000
+3250 IF X > 50 THEN GOTO 4000
+3260 IF X > 25 AND Y < B THEN GOTO 3500
+3262 REM Save the background color in Z
+3275 LET Z = COLOR(X, Y)
+3270 REM Plot the projectile at its new position
+3280 PLOT X, Y, "yellow"
+3290 PAUSE 30
+3300 REM Graviation on the projectile in the negative Y direction 
+3310 LET V = V - 0.02
+3320 GOTO 3190
+3500 REM Check if the projectile is close enough to the target
+3510 IF ABS(X - 40) > 2 THEN GOTO 4000
+3520 PRINT "Hit! You win!"
+3530 REM Define 40 flames by the arrays X2, Y2, and C2
+3540 ARRAY X2
+3550 ARRAY Y2
+3560 ARRAY C2
+3570 FOR I = 1 TO 40
+3580 LET X2[I] = FLOOR(RAND(5)) + 38
+3590 LET Y2[I] = FLOOR(RAND(5)) + B
+3600 LET C2[i] = "orange"
+3610 NEXT I
+3620 FOR J = 1 TO 5
+3630 FOR I = 1 TO 40
+3640 IF Y2[I] < B+3 THEN PLOT X2[I], Y2[I], "black" ELSE PLOT X2[I], Y2[I], "cyan" 
+3650 LET Y2[I] = Y2[I] + 1
+3660 PLOT X2[I], Y2[I], C2[I]
+3670 IF RAND(1) > 0.8 THEN LET C2[I] = "red"
+3680 IF RAND(1) > 0.8 THEN LET C2[I] = "orange"
+3690 IF RAND(1) > 0.8 THEN LET C2[I] = "yellow"
+3700 IF RAND(1) > 0.3 AND Y2[I] < B+9 THEN GOTO 3750
+3710 IF Y2[I] < B+3 THEN PLOT X2[I], Y2[I], "black" ELSE PLOT X2[I], Y2[I], "cyan" 
+3720 LET X2[I] = FLOOR(RAND(5)) + 38
+3730 LET Y2[I] = B
+3740 LET C2[i] = "orange"
+3750 PAUSE 20
+3760 NEXT I
+3770 NEXT J
+3780 FOR I = 1 TO 40
+3790 IF Y2[I]< B+3 THEN PLOT X2[I], Y2[I], "black" ELSE PLOT X2[I], Y2[I], "cyan"
+3800 NEXT I
+3780 END
+4000 PRINT "Miss!"
+4010 GOTO 3000
