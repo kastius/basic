@@ -1,0 +1,91 @@
+1000 REM Pong
+1010 REM KASTIUS PING PONG
+1020 REM ------------------------ 
+1030 CLS
+1040 PRINT "***** KASTIUS PING PONG *****"
+1050 PRINT "LEFT PLAYER    RIGHT PLAYER"
+1060 PRINT "UP:   Q        UP:   P"
+1070 PRINT "STOP: A        STOP: L"
+1080 PRINT "DOWN: Z        DOWN: <"
+1090 PRINT "****************************"
+1100 PRINT
+2000 REM X,Y hold the position of the ball
+2010 LET X = 10
+2020 LET Y = 3
+2030 REM U,V hold the speed of the ball
+2040 LET U = 1
+2050 LET V = 1
+2060 REM P and Q are the vertical positions of the paddles
+2070 REM R and S are the speeds of the paddles
+2080 LET P = 11
+2090 LET R = 0
+2100 LET Q = 11
+2110 LET S = 0
+2120 REM W is a random component to the y-direction speed
+2130 LET W = 1
+2140 REM Draw the paddles at their initial positions  
+2150 FOR I = 11 TO 14
+2160 PLOT 0, I, "white"
+2170 PLOT 24, I, "white"
+2180 NEXT I
+3000 REM The keyboard input loop
+3010 PAUSE 25 + 50 * (5 - LEVEL) 
+3020 REM Before moving ahead, handle all of the keyboard buffer
+3030 LET C = GETCHAR()
+3040 IF C = "" THEN GOTO 4000
+3050 IF C = "Q" OR C = "q" THEN LET R = 1
+3060 IF C = "A" OR C = "a" THEN LET R = 0
+3070 IF C = "Z" OR C = "z" THEN LET R = -1
+3080 IF C = "P" OR C = "p" THEN LET S = 1
+3090 IF C = "L" OR C = "l" THEN LET S = 0
+3100 IF C = "<" OR C = "," THEN LET S = -1
+3110 GOTO 3000
+4000 REM Move the ball
+4010 PLOT X, Y, "gray"
+4020 LET X = X + V
+4030 LET Y = Y + U * W
+4040 PLOT X, Y, "white"
+4050 REM Bounce off the top and bottom walls
+4060 REM The plotted y-position is rounded so we round here
+4070 REM when we are doing collision detection 
+4080 LET Z = ROUND(Y)
+4090 IF Z <= 1 OR Z >= 23 THEN LET U = -U
+4100 REM Check paddle position before bouncing
+4110 IF X <> 1 AND X <> 23 THEN GOTO 5000
+4120 IF X = 1 AND (Z < P - 1 OR Z > P + 4) THEN GOTO 6000
+4130 IF X = 23 AND (Z < Q - 1 OR Z > Q + 4) THEN GOTO 6000
+4140 REM Bounce on the paddle
+4150 LET V = -V
+4160 REM Change the random component of the y-speed
+4170 LET W = 0.9 + RAND(0.6) 
+5000 REM Move the paddles
+5010 IF P = 21 AND R = 1 THEN LET R = 0
+5010 IF P = 0 AND R = -1 THEN LET R = 0
+5010 IF Q = 21 AND S = 1 THEN LET S = 0
+5010 IF Q = 0 AND S = -1 THEN LET S = 0
+5100 IF R <> 1 THEN GOTO 5200
+5110 PLOT 0, P, "gray"
+5130 LET P = P + R
+5140 PLOT 0, P + 3, "white"
+5200 IF R <> -1 THEN GOTO 5300
+5210 PLOT 0, P + 3, "gray"
+5230 LET P = P + R
+5240 PLOT 0, P, "white"
+5300 IF S <> 1 THEN GOTO 5400
+5310 PLOT 24, Q, "gray"
+5330 LET Q = Q + S
+5340 PLOT 24, Q + 3, "white"
+5400 IF S <> -1 THEN GOTO 5500
+5410 PLOT 24, Q + 3, "gray"
+5430 LET Q = Q + S
+5440 PLOT 24, Q, "white"
+5500 GOTO 3000
+6000 REM Game Over
+6010 CLT
+6020 PRINT "***** KASTIUS PING PONG *****"
+6030 PRINT
+6040 PRINT "******** GAME OVER *********"
+6050 IF X = 1 THEN PRINT "RIGHT"; ELSE PRINT "LEFT";
+6060 PRINT " PLAYER IS THE WINNER!"
+6070 PRINT "****************************"
+6080 PRINT
